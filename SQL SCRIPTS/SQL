@@ -1,1 +1,83 @@
+-- Player Demographics
+SELECT
+    CASE
+        WHEN Age BETWEEN 10 AND 20 THEN '10-20'
+        WHEN Age BETWEEN 21 AND 30 THEN '21-30'
+        WHEN Age BETWEEN 31 AND 40 THEN '31-40'
+        WHEN Age > 40 THEN '40+'
+    END AS AgeGroup,
+    Gender,
+    COUNT(PlayerID) AS PlayerCount
+FROM `case3-443510.behavior_analysis.gaming`
+GROUP BY AgeGroup, Gender
+ORDER BY PlayerCount DESC;
+
+
+-- Average Weekly Sessions by Age Group and Gender
+SELECT
+    AgeGroup,
+    Gender,
+    AVG(SessionsPerWeek) AS AvgSessions
+FROM (
+    SELECT
+        CASE
+            WHEN Age BETWEEN 10 AND 20 THEN '10-20'
+            WHEN Age BETWEEN 21 AND 30 THEN '21-30'
+            WHEN Age BETWEEN 31 AND 40 THEN '31-40'
+            WHEN Age > 40 THEN '40+'
+        END AS AgeGroup,
+        Gender,
+        SessionsPerWeek
+    FROM `case3-443510.behavior_analysis.gaming`
+) AS AgeGenderData
+GROUP BY AgeGroup, Gender
+ORDER BY AvgSessions DESC;
+
+
+-- Popular Game Genres
+SELECT
+    GameGenre,
+    SUM(PlayTimeHours) AS TotalPlaytime
+FROM `case3-443510.behavior_analysis.gaming`
+GROUP BY GameGenre
+ORDER BY TotalPlaytime DESC
+LIMIT 5;
+
+
+-- Engagement by Difficulty Level
+SELECT
+    GameDifficulty,
+    AVG(SessionsPerWeek) AS AvgSessionsPerWeek
+FROM `case3-443510.behavior_analysis.gaming`
+GROUP BY GameDifficulty
+ORDER BY AvgSessionsPerWeek DESC;
+
+
+-- Regional Analysis
+SELECT
+    Location,
+    AVG(InGamePurchases) AS AvgPurchases,
+    AVG(PlayTimeHours) AS AvgPlaytime
+FROM `case3-443510.behavior_analysis.gaming`
+GROUP BY Location
+ORDER BY AvgPurchases DESC;
+
+
+-- Player Levels and Achievements
+SELECT
+    PlayerLevel,
+    COUNT(PlayerID) AS PlayerCount,
+    AVG(AchievementsUnlocked) AS AvgAchievements
+FROM `case3-443510.behavior_analysis.gaming`
+GROUP BY PlayerLevel
+ORDER BY PlayerLevel ASC;
+
+
+-- Achievements Per Session by Difficulty
+SELECT
+    GameDifficulty,
+    AVG(AchievementsPerSession) AS AvgAchievementsPerSession
+FROM `case3-443510.behavior_analysis.gaming`
+GROUP BY GameDifficulty
+ORDER BY AvgAchievementsPerSession DESC;
 
